@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Martins Heron Trains</title>
+  <link rel="stylesheet" type="text/css" href="css/app.css">
+  <link rel="icon" href="images/icon.png" type="image/x-icon"/>
+  <link rel="shortcut icon" href="images/icon.png" type="image/x-icon"/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'>
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+
+<div class="container">
+<!-- Reading -->
+  <div class="top">
+    <div class="inner">
+      <div id="london">
+        <h2>To Reading</h2>
+        <div class="nextTrain"><p>Next Train: <span></span></p></div>
+        <!-- <div class="countdown">Arriving in: <span></span> minutes</div> -->
+        <div class="onTime"><p>Status: <span></span></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign -->
+  <div class="station">
+    <span>Martins Heron</span>
+  </div>
+
+  <!-- London -->
+  <div class="bottom">
+    <div class="inner">
+      <div id="reading">
+        <h2>To London</h2>
+        <div class="nextTrain"><p>Next Train: <span></span></p></div>
+        <!-- <div class="countdown">Arriving in: <span></span> minutes</div> -->
+        <div class="onTime"><p>Status: <span></span></p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/jquery.soap.js"></script>
+<script type="text/javascript">
+
+// Date time setup
+var now = new Date();
+
+// from Reading
+var r = new XMLHttpRequest();
+r.open("GET", "https://huxley.apphb.com/all/mao/from/rdg/1?accessToken=5b19e775-ded8-4647-a792-c9359f0925e0", true);
+r.onreadystatechange = function () {
+    if (r.readyState != 4 || r.status != 200) return;
+    var resp = JSON.parse(r.response);
+    console.log(r.response);
+
+    if (resp.trainServices && resp.trainServices.length > 0) {
+
+      $('#reading .nextTrain span').text(resp.trainServices[0].sta);
+      $('#reading .onTime span').text(resp.trainServices[0].eta);
+
+        // alert("The next train to arrive at " + resp.locationName + " from " + resp.filterLocationName + " will get in at " + resp.trainServices[0].sta);
+    } else {
+        // alert("Sorry, no trains from " + resp.filterLocationName + " arriving soon");
+    }
+};
+r.send();
+
+// from London
+var l = new XMLHttpRequest();
+l.open("GET", "https://huxley.apphb.com/all/mao/from/wat/1?accessToken=5b19e775-ded8-4647-a792-c9359f0925e0", true);
+l.onreadystatechange = function () {
+    if (l.readyState != 4 || l.status != 200) return;
+    var resp = JSON.parse(l.response);
+    console.log(l.response);
+
+    if (resp.trainServices && resp.trainServices.length > 0) {
+
+      $('#london .nextTrain span').text(resp.trainServices[0].sta);
+      $('#london .onTime span').text(resp.trainServices[0].eta);
+
+        // alert("The next train to arrive at " + resp.locationName + " from " + resp.filterLocationName + " will get in at " + resp.trainServices[0].sta);
+    } else {
+        // alert("Sorry, no trains from " + resp.filterLocationName + " arriving soon");
+    }
+};
+l.send();
+
+</script>
+</body>
+</html>
